@@ -2,7 +2,7 @@
 
 namespace School_pws.Data.Entities
 {
-    public class Subject
+    public class Subject : IEntity
     {
         public int Id { get; set; }
 
