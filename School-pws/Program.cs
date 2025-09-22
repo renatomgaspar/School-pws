@@ -9,6 +9,8 @@ builder.Services.AddDbContext<DataContext>(cfg =>
     cfg.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

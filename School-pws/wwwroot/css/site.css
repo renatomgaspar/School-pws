@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.text-truncate-7 {
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
