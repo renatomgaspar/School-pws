@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>School_pws</RootNamespace>
+    <UserSecretsId>b4204f84-fb62-4291-bdb8-ff5513313b86</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
