@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using School_pws.Data;
 using School_pws.Data.Entities;
@@ -26,6 +27,7 @@ namespace School_pws.Controllers
                 .OrderBy(s => s.Name));
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Manage()
         {
             return View(_subjectRepository.GetAll().OrderBy(s => s.Name));
@@ -47,6 +49,7 @@ namespace School_pws.Controllers
             return View(subject);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -71,6 +74,7 @@ namespace School_pws.Controllers
             return View(subject);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -118,6 +122,7 @@ namespace School_pws.Controllers
             return View(subject);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

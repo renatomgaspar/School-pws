@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using School_pws.Data.Entities;
 using School_pws.Models.Users;
 
@@ -8,18 +10,26 @@ namespace School_pws.Helpers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public UserHelper(
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);
+        }
+
+        public async Task AddUserToRoleAsync(User user, string roleName)
+        {
+            await _userManager.AddToRoleAsync(user, roleName);
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -52,6 +62,43 @@ namespace School_pws.Helpers
             string newPassword)
         {
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+        }
+
+        public async Task CheckRoleAsync(string roleName)
+        {
+            var roleExists = await _roleManager.RoleExistsAsync(roleName);
+            if (!roleExists)
+            {
+                await _roleManager.CreateAsync(new IdentityRole
+                {
+                    Name = roleName,
+                });
+            }
+        }
+
+        public async Task<bool> IsUserInRoleAsync(User user, string roleName)
+        {
+            return await _userManager.IsInRoleAsync(user, roleName);
+        }
+
+        public IEnumerable<SelectListItem> GetComboRoles()
+        {
+            var list = _roleManager.Roles
+                .Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Name
+                })
+                .OrderBy(r => r.Text)
+                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "(Select a role...)",
+                Value = string.Empty
+            });
+
+            return list;
         }
     }
 }

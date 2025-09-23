@@ -23,9 +23,15 @@ namespace School_pws.Controllers
             _converterHelper = converterHelper;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Register()
         {
-            return View();
+            var model = new RegisterNewUserViewModel
+            {
+                Roles = _userHelper.GetComboRoles()
+            };
+
+            return View(model);
         }
 
 
@@ -53,6 +59,9 @@ namespace School_pws.Controllers
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
                         return View(model);
                     }
+
+                    await _userHelper.CheckRoleAsync(model.Role);
+                    await _userHelper.AddUserToRoleAsync(user, model.Role);
 
                     TempData["SuccessMessage"] = "User created successfully!";
                 }

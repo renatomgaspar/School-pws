@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace School_pws.Models.Users
 {
@@ -19,6 +20,11 @@ namespace School_pws.Models.Users
         public string Email { get; set; }
 
 
+        [Required]
+        [Display(Name = "Role")]
+        public string Role { get; set; }
+
+
         [Display(Name = "UserName*")]
         public string? UserName { get; set; }
 
@@ -34,5 +40,8 @@ namespace School_pws.Models.Users
 
         [Display(Name = "Image")]
         public IFormFile? ImageFile { get; set; }
+
+
+        public IEnumerable<SelectListItem> Roles { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace School_pws.Models.Users
 
 
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://localhost:44387/images/userDefaultImage.png"
+            ? $"https://localhost:44340/images/userDefaultImage.png"
             : $"https://schoolcontainer.blob.core.windows.net/users/{ImageId}";
     }
 }

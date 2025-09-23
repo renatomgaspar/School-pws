@@ -40,6 +40,12 @@
             </div>
 
             <div class="form-group mb-3">
+                <label asp-for="Role" class="form-label"></label>
+                <select asp-for="Role" asp-items="Model.Roles" class="form-select"></select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
                 <label asp-for="ImageFile" class="control-label"></label>
                 <input asp-for="ImageFile" class="form-control" type="file" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>

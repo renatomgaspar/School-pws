@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using School_pws.Data.Entities;
 using School_pws.Models.Users;
 
@@ -10,6 +11,8 @@ namespace School_pws.Helpers
 
         Task<IdentityResult> AddUserAsync(User user, string password);
 
+        Task AddUserToRoleAsync(User user, string roleName);
+
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
         Task LogoutAsync();
@@ -17,5 +20,11 @@ namespace School_pws.Helpers
         Task<IdentityResult> UpdateUserAsync(User user);
 
         Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
+
+        Task CheckRoleAsync(string roleName);
+
+        Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+        IEnumerable<SelectListItem> GetComboRoles();
     }
 }
