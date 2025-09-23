@@ -31,5 +31,8 @@ namespace School_pws.Data.Entities
         [Required]
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; }
+
+
+        public User? User { get; set; }
     }
 }

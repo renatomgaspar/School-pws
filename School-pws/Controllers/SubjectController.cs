@@ -2,16 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using School_pws.Data;
 using School_pws.Data.Entities;
+using School_pws.Helpers;
 
 namespace School_pws.Controllers
 {
     public class SubjectController : Controller
     {
         private ISubjectRepository _subjectRepository;
+        private readonly IUserHelper _userHelper;
 
-        public SubjectController(ISubjectRepository subjectRepository)
+        public SubjectController(
+            ISubjectRepository subjectRepository,
+            IUserHelper userHelper)
         {
             _subjectRepository = subjectRepository;
+            _userHelper = userHelper;
         }
 
         public IActionResult Index()
@@ -59,6 +64,7 @@ namespace School_pws.Controllers
                     return View(subject);
                 }
 
+                subject.User = await _userHelper.GetUserByEmailAsync("school_manager@gmail.com");
                 await _subjectRepository.CreateAsync(subject);
                 return RedirectToAction(nameof(Manage));
             }
@@ -93,6 +99,7 @@ namespace School_pws.Controllers
             {
                 try
                 {
+                    subject.User = await _userHelper.GetUserByEmailAsync("school_manager@gmail.com");
                     await _subjectRepository.UpdateAsync(subject);
                 }
                 catch (DbUpdateConcurrencyException)

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using School_pws.Data.Entities;
+using System.Net.Sockets;
+using System.Numerics;
 
 namespace School_pws.Data
 {
@@ -15,6 +17,17 @@ namespace School_pws.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Subject>()
+                .HasOne(s => s.User)
+                .WithMany()      
+                .IsRequired()           
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
