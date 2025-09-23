@@ -26,6 +26,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 .AddEntityFrameworkStores<DataContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
@@ -49,6 +50,12 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<SeedDb>();
+    await seeder.SeedAsync();
+}
 
 app.MapControllerRoute(
     name: "default",

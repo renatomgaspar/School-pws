@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace School_pws.Models.Users
@@ -42,6 +43,7 @@ namespace School_pws.Models.Users
         public IFormFile? ImageFile { get; set; }
 
 
-        public IEnumerable<SelectListItem> Roles { get; set; }
+        [BindNever]
+        public IEnumerable<SelectListItem>? Roles { get; set; }
     }
 }

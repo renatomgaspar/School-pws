@@ -71,6 +71,7 @@ namespace School_pws.Controllers
                 }   
             }
 
+            model.Roles = _userHelper.GetComboRoles();
             return View(model);
         }
 
