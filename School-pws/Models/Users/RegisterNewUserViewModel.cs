@@ -21,9 +21,8 @@ namespace School_pws.Models.Users
         public string Email { get; set; }
 
 
-        [Required]
         [Display(Name = "Role")]
-        public string Role { get; set; }
+        public string? Role { get; set; }
 
 
         [Display(Name = "UserName*")]

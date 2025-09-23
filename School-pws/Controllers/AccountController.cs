@@ -23,12 +23,14 @@ namespace School_pws.Controllers
             _converterHelper = converterHelper;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Register()
         {
             var model = new RegisterNewUserViewModel
             {
                 Roles = _userHelper.GetComboRoles()
+                    .Where(r => r.Value != "Student")
+                    .ToList()
             };
 
             return View(model);
@@ -38,6 +40,11 @@ namespace School_pws.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                model.Role = "Student";
+            }
+
             if (ModelState.IsValid)
             {
                 var user = await _userHelper.GetUserByEmailAsync(model.Email);
@@ -54,7 +61,7 @@ namespace School_pws.Controllers
                     user = _converterHelper.ToUser(model, imageId, true);
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
-                    if (result != IdentityResult.Success)
+                    if (!result.Succeeded)
                     {
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
                         return View(model);
