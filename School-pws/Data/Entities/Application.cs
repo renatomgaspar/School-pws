@@ -20,7 +20,7 @@ namespace School_pws.Data.Entities
 
 
         [Required]
-        public Student Student { get; set; }
+        public User User { get; set; }
 
 
         [Required]

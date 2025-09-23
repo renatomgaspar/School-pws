@@ -4,11 +4,11 @@ using School_pws.Data.Entities;
 
 namespace School_pws.Data
 {
-    public class DataContext : IdentityDbContext<Student>
+    public class DataContext : IdentityDbContext<User>
     {
         public DbSet<Subject> Subjects { get; set; }
 
-        public DbSet<Student> Students { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DbSet<Application> Applications { get; set; }
 
