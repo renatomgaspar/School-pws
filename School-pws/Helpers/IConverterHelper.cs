@@ -5,8 +5,8 @@ namespace School_pws.Helpers
 {
     public interface IConverterHelper
     {
-        User ToStudent(RegisterNewUserViewModel model, Guid imageId, bool isNew);
+        User ToUser(RegisterNewUserViewModel model, Guid imageId, bool isNew);
 
-        RegisterNewUserViewModel ToRegisterNewStudentViewModel(User user);
+        RegisterNewUserViewModel ToRegisterNewUserViewModel(User user);
     }
 }

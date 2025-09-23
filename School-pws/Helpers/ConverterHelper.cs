@@ -5,7 +5,7 @@ namespace School_pws.Helpers
 {
     public class ConverterHelper : IConverterHelper
     {
-        public RegisterNewUserViewModel ToRegisterNewStudentViewModel(User user)
+        public RegisterNewUserViewModel ToRegisterNewUserViewModel(User user)
         {
             return new RegisterNewUserViewModel
             {
@@ -17,7 +17,7 @@ namespace School_pws.Helpers
             };
         }
 
-        public User ToStudent(RegisterNewUserViewModel model, Guid imageId, bool isNew)
+        public User ToUser(RegisterNewUserViewModel model, Guid imageId, bool isNew)
         {
             return new User
             {

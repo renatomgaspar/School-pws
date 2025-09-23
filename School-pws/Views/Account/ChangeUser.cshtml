@@ -1,0 +1,52 @@
+﻿@model School_pws.Models.Users.ChangeUserViewModel
+
+@{
+    ViewData["Title"] = "Change User";
+}
+
+<h2>Change User Information</h2>
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly"></div>
+            @if (!string.IsNullOrEmpty(Model.ImageFullPath))
+            {
+                <div class="form-group mb-2 text-center">
+                    <img src="@Url.Content(Model.ImageFullPath)" alt="Image" class="rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                </div>
+            }
+
+            <div class="form-group mb-2">
+                <label asp-for="FirstName">First Name</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="LastName">Last Name</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" class="form-control" type="file" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <input type="submit" value="Update" class="btn btn-primary" />
+                <a asp-action="ChangePassword" class="btn btn-success">Change Password</a>
+            </div>
+
+            <div class="text-success">@ViewBag.UserMessage</div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
