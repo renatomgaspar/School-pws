@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - School_pws</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/School_pws.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100 mb-0">
     <header class="mb-5">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-top">
             <div class="container-fluid">
-                <b><a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">School</a></b>
+                <b><a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/schoolLogo.png" width="70px" height="70px" /></a></b>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -52,10 +52,10 @@
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangeUser">@this.User.Identity.Name</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangeUser">@this.User.Identity.Name <i class="fa-solid fa-user"></i></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
                             </li>
                         }
                         else
@@ -69,13 +69,13 @@
             </div>
         </nav>
     </header>
-    <div class="container pt-4">
+    <div class="container pt-5">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer fixed-bottom bg-white text-muted p-4">
+    <footer class="border-top footer bg-white text-muted p-4 mt-auto">
         <div class="container">
             &copy; 2025 - School_pws - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

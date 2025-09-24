@@ -47,7 +47,7 @@
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" />
-        <a asp-action="Manage" class="btn btn-success">Back to List</a>
+        <button type="submit" class="btn btn-danger">Delete <i class="fa-solid fa-trash"></i></button>
+        <a asp-action="Manage" class="btn btn-success">Back to List <i class="fa-solid fa-circle-left"></i></a>
     </form>
 </div>
