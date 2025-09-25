@@ -1,16 +1,14 @@
 ﻿@model School_pws.Models.Users.RegisterNewUserViewModel
 
-@{
-    ViewData["Title"] = "Register User";
-}
-
 @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
 {
     <h2>Register User</h2>
+    ViewData["Title"] = "Register User";
 }
 else
 {
     <h2>Register Student</h2>
+    ViewData["Title"] = "Register Student";
 }
 
 <div class="row">
@@ -71,6 +69,7 @@ else
 
             <div class="form-group mb-2">
                 <button type="submit" class="btn btn-primary">Register New User <i class="fa-solid fa-floppy-disk"></i></button>
+                <a asp-action="Manage" class="btn btn-success">Back to List <i class="fa-solid fa-circle-left"></i></a>
             </div>
         </form>
 

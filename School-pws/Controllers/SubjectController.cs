@@ -143,7 +143,7 @@ namespace School_pws.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var subject = await _subjectRepository.GetByIdAsync(id); ;
+            var subject = await _subjectRepository.GetByIdAsync(id); 
             await _subjectRepository.DeleteAsync(subject);
             return RedirectToAction(nameof(Manage));
         }

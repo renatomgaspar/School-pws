@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using School_pws.Data;
+using School_pws.Data.Entities;
 using School_pws.Helpers;
 using School_pws.Models.Users;
 
@@ -21,6 +24,12 @@ namespace School_pws.Controllers
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
+        }
+
+        [Authorize(Roles = "Admin,Employee")]
+        public async Task<IActionResult> Manage()
+        {
+            return View(await _userHelper.GetAllAsync(User));
         }
 
         [Authorize(Roles = "Admin,Employee")]
@@ -203,6 +212,93 @@ namespace School_pws.Controllers
 
             return this.View(model);
         }
+
+        [Authorize(Roles = "Admin,Employee")]
+        public async Task<ActionResult> Details(string id)
+        {
+            var user = await _userHelper.GetUserById(id);
+
+            if (user == null)
+            {
+                this.ModelState.AddModelError(string.Empty, "User not found.");
+            }
+
+            return View(user);
+        }
+
+        [Authorize(Roles = "Admin,Employee")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await _userHelper.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, User user)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = await _userHelper.GetUserById(user.Id);
+                if (existingUser != null)
+                {
+                    existingUser.FirstName = user.FirstName;
+                    existingUser.LastName = user.LastName;
+                    existingUser.Email = user.Email;
+                    existingUser.UserName = user.Email;
+
+                    var result = await _userHelper.UpdateUserAsync(existingUser);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Manage));
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+
+            return View(user);
+        }
+
+        [Authorize(Roles = "Admin,Employee")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _userHelper.GetUserById(id);
+            await _userHelper.DeleteUserAsync(id);
+            return RedirectToAction(nameof(Manage));
+        }
+
 
         public IActionResult NotAuthorized()
         {

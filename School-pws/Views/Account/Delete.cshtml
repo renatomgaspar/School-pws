@@ -1,0 +1,45 @@
+﻿@model School_pws.Data.Entities.User
+
+@if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+{
+    <h1>Delete User</h1>
+    ViewData["Title"] = "Delete User";
+}
+else
+{
+    ViewData["Title"] = "Delete Student";
+    <h1>Delete Student</h1>
+}
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="row">
+                <div class="col-md-4">
+                    <img src="@Url.Content(Model.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto">
+                </div>
+                <div>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.FullName)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.FullName)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete <i class="fa-solid fa-trash"></i></button>
+        <a asp-action="Manage" class="btn btn-success">Back to List <i class="fa-solid fa-circle-left"></i></a>
+    </form>
+</div>

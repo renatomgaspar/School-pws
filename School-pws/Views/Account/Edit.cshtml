@@ -1,0 +1,58 @@
+﻿@model School_pws.Data.Entities.User
+
+@if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+{
+    <h1>Edit User</h1>
+    ViewData["Title"] = "Edit User";
+}
+else
+{
+    ViewData["Title"] = "Edit Student";
+    <h1>Edit Student</h1>
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+
+            @if (!string.IsNullOrEmpty(Model.ImageFullPath))
+            {
+                <div class="form-group mb-2 text-center">
+                    <img src="@Url.Content(Model.ImageFullPath)" alt="Image" class="rounded-circle" style="width:150px; height:150px; object-fit:cover;">
+                </div>
+            }
+
+            <div class="form-group mb-2">
+                <label asp-for="FirstName">First Name</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="LastName">Last Name</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-warning"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <button type="submit" class="btn btn-primary">Update <i class="fa-solid fa-pen-to-square"></i></button>
+            </div>
+        </form>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
