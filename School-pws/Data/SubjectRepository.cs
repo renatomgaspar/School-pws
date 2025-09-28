@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using School_pws.Data.Entities;
 
@@ -43,6 +44,24 @@ namespace School_pws.Data
 
             _context.Subjects.Update(subject);
             await _context.SaveChangesAsync();
+        }
+
+        public IEnumerable<SelectListItem> GetComboSubjects()
+        {
+            var list = _context.Subjects.Select(p => new SelectListItem
+            {
+                Text = p.Name,
+                Value = p.Id.ToString()
+            }).ToList();
+
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "(Select a subject...)",
+                Value = "0"
+            });
+
+            return list;
         }
     }
 }
