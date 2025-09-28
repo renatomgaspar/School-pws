@@ -6,9 +6,13 @@
 
 <h1 class="mb-3">Manage Subjects</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New <i class="fa-solid fa-plus"></i></a>
-</p>
+@if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New <i class="fa-solid fa-plus"></i></a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -46,9 +50,24 @@
                     @Html.DisplayFor(modelItem => item.IsActive)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit <i class="fa-solid fa-pen-to-square"></i></a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details <i class="fa-solid fa-circle-info"></i></a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete <i class="fa-solid fa-trash"></i></a>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit <i class="fa-solid fa-pen-to-square"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details <i class="fa-solid fa-circle-info"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete <i class="fa-solid fa-trash"></i></a>
+                    }
+                    else
+                    {
+                        @if (item.IsActive == false)
+                        {
+                            <a asp-action="ActivateDesactivate" asp-route-id="@item.Id" class="btn btn-success">Activate <i class="fa-solid fa-circle-check"></i></a>
+                        }
+                        else
+                        {
+                            <a asp-action="ActivateDesactivate" asp-route-id="@item.Id" class="btn btn-danger">Deactivate <i class="fa-solid fa-power-off"></i></a>
+                        }
+
+                    }
                 </td>
             </tr>
         }

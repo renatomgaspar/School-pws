@@ -27,7 +27,7 @@ namespace School_pws.Controllers
                 .OrderBy(s => s.Name));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Manage()
         {
             return View(_subjectRepository.GetAll().OrderBy(s => s.Name));
@@ -146,6 +146,18 @@ namespace School_pws.Controllers
             var subject = await _subjectRepository.GetByIdAsync(id); 
             await _subjectRepository.DeleteAsync(subject);
             return RedirectToAction(nameof(Manage));
+        }
+
+        public async Task<IActionResult> ActivateDesactivate(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            await _subjectRepository.ChangeActivedSubject(id);
+
+            return RedirectToAction("Manage");
         }
     }
 }
