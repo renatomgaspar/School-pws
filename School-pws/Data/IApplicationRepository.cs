@@ -15,5 +15,11 @@ namespace School_pws.Data
         Task DeleteSubjectFromApplication(int id);
 
         Task<bool> ConfirmApplicationAsync(string email);
+
+        Task<List<ApplicationDetailsViewModel>> GetApplicationDetailsAsync(int? id);
+
+        Task<bool> AcceptApplication(int id);
+
+        Task<bool> DenyApplication(int id);
     }
 }

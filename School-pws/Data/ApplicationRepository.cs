@@ -30,10 +30,11 @@ namespace School_pws.Data
             }
             else
             {
-                if (await _userHelper.IsUserInRoleAsync(user, "Admin"))
+                if (await _userHelper.IsUserInRoleAsync(user, "Admin") || await _userHelper.IsUserInRoleAsync(user, "Employee"))
                 {
                     return _context.Applications
                         .Include(u => u.User)
+                        .OrderByDescending(a => a.Status)
                         .OrderByDescending(a => a.ApplicationDate);
                 }
 
@@ -85,7 +86,7 @@ namespace School_pws.Data
             var existsSubjectInOtherApplication = await _context.Applications
                 .AnyAsync(app => app.User == user
                 && app.Subjects.Any(ad => ad.Subject == subject
-                && (ad.Status == "Applied" || ad.Status == "In Progress")));
+                && (ad.Status == "Applied" || ad.Status == "On Going")));
 
             if (existsSubjectInOtherApplication)
             {
@@ -154,6 +155,78 @@ namespace School_pws.Data
 
             await CreateAsync(application);
             _context.ApplicationDetailsTemp.RemoveRange(applicationDetailsTemp);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<ApplicationDetailsViewModel>> GetApplicationDetailsAsync(int? id)
+        {
+            var application = await _context.Applications
+                .Include(app => app.Subjects)
+                .ThenInclude(ad => ad.Subject)
+                .FirstOrDefaultAsync(app => app.Id == id);
+
+            if (application == null)
+            {
+                return new List<ApplicationDetailsViewModel>();
+            }
+
+            return application.Subjects
+                .Select(ad => new ApplicationDetailsViewModel
+                {
+                    ApplicationId = ad.Application.Id,
+                    SubjectCode = ad.Subject.Code,
+                    SubjectName = ad.Subject.Name,
+                    Grade = ad.Grade,
+                    Status = ad.Status
+                })
+                .ToList();
+        }
+
+        public async Task<bool> AcceptApplication(int id)
+        {
+            var application = await _context.Applications
+                .Include(a => a.Subjects)
+                .ThenInclude(ad => ad.Subject)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (application == null)
+            {
+                return false;
+            }
+
+            application.Status = "Accepted";
+
+            foreach (var subject in application.Subjects)
+            {
+                subject.Status = "On Going";
+            }
+
+            _context.Applications.Update(application);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DenyApplication(int id)
+        {
+            var application = await _context.Applications
+                .Include(a => a.Subjects)
+                .ThenInclude(ad => ad.Subject)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (application == null)
+            {
+                return false;
+            }
+
+            application.Status = "Denied";
+
+            foreach (var subject in application.Subjects)
+            {
+                subject.Status = "Canceled";
+            }
+
+            _context.Applications.Update(application);
             await _context.SaveChangesAsync();
             return true;
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using School_pws.Data;
 using School_pws.Models.Applications;
 using System.Diagnostics;
@@ -18,18 +19,21 @@ namespace School_pws.Controllers
             _subjectRepository = subjectRepository;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var model = await _applicationRepository.GetApplicationsAsync(this.User.Identity.Name);
             return View(model);
         }
 
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> Create()
         {
             var model = await _applicationRepository.GetApplicationDetails(this.User.Identity.Name);
             return View(model);
         }
 
+        [Authorize(Roles = "Student")]
         public IActionResult AddSubject()
         {
             var model = new AddApplicationViewModel
@@ -77,6 +81,46 @@ namespace School_pws.Controllers
             }
 
             return RedirectToAction("Create");
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var application = await _applicationRepository.GetApplicationDetailsAsync(id);
+            if (application == null)
+            {
+                return NotFound();
+            }
+
+            return View(application);
+        }
+
+        public async Task<IActionResult> AcceptApplication(int id)
+        {
+            var response = await _applicationRepository.AcceptApplication(id);
+
+            if (response)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> DenyApplication(int id)
+        {
+            var response = await _applicationRepository.DenyApplication(id);
+
+            if (response)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View();
         }
     }
 }

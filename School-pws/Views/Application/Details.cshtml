@@ -1,0 +1,53 @@
+﻿@model IEnumerable<School_pws.Models.Applications.ApplicationDetailsViewModel>
+
+@{
+    ViewData["Title"] = "Application Details";
+}
+
+<h1 class="mb-2">Application Details</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Grade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubjectCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubjectName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+            </tr>
+        }
+        <div class="mb-2">
+            @if (this.User.Identity.IsAuthenticated && (this.User.IsInRole("Employee") || this.User.IsInRole("Admin")) && Model.FirstOrDefault().Status == "Applied")
+            {
+                <a asp-action="AcceptApplication" asp-route-id="@Model.FirstOrDefault().ApplicationId" class="btn btn-success">Accept </a>
+                <a asp-action="DenyApplication" asp-route-id="@Model.FirstOrDefault().ApplicationId" class="btn btn-danger">Deny </a>
+            }
+            <a asp-action="Index" class="btn btn-secondary">Back to List <i class="fa-solid fa-circle-left"></i></a>
+        </div>
+    </tbody>
+</table>
