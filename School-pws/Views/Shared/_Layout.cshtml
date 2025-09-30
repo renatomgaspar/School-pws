@@ -28,6 +28,11 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Application" asp-action="Index">Applications</a>
                             </li>
                         }
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Student"))
+                        {
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Subject" asp-action="MySubjects">My Subjects</a>
+
+                        }
                         @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">

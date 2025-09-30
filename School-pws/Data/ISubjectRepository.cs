@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using School_pws.Data.Entities;
+using School_pws.Models.Applications;
 
 namespace School_pws.Data
 {
     public interface ISubjectRepository : IGenericRepository<Subject>
     {
-        IQueryable GetAllWithUsers();
+        Task<List<ApplicationDetailsViewModel>> GetUserSubjectsAsync(string email);
 
         bool SubjectExistsByCode(string code);
 

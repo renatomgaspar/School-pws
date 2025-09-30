@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using School_pws.Data;
 using School_pws.Data.Entities;
 using School_pws.Helpers;
@@ -25,6 +26,12 @@ namespace School_pws.Controllers
             return View(_subjectRepository.GetAll()
                 .Where(s => s.IsActive == true)
                 .OrderBy(s => s.Name));
+        }
+
+        public async Task<IActionResult> MySubjects()
+        {
+            var subjects = await _subjectRepository.GetUserSubjectsAsync(User.Identity.Name);
+            return View(subjects);
         }
 
         [Authorize(Roles = "Admin,Employee")]

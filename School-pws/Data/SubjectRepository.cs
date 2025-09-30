@@ -2,21 +2,47 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using School_pws.Data.Entities;
+using School_pws.Helpers;
+using School_pws.Models.Applications;
 
 namespace School_pws.Data
 {
     public class SubjectRepository : GenericRepository<Subject>, ISubjectRepository
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public SubjectRepository(DataContext context) : base(context)
+        public SubjectRepository(
+            DataContext context,
+            IUserHelper userHelper) : base(context)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
-        public IQueryable GetAllWithUsers()
+        public async Task<List<ApplicationDetailsViewModel>> GetUserSubjectsAsync(string email)
         {
-            return _context.Subjects.Include(p => p.User);
+            var user = await _userHelper.GetUserByEmailAsync(email);
+
+            if (user == null)
+            {
+                return new List<ApplicationDetailsViewModel>();
+            }
+
+            return await _context.Applications
+                .Include(a => a.Subjects)
+                .ThenInclude(ad => ad.Subject)
+                .Where(a => a.User == user)
+                .SelectMany(a => a.Subjects)
+                .Where(ad => ad.Status == "On Going")
+                .Select(ad => new ApplicationDetailsViewModel
+                {
+                    SubjectCode = ad.Subject.Code,
+                    SubjectName = ad.Subject.Name,
+                    Grade = ad.Grade,
+                    Status = ad.Status
+                })
+                .ToListAsync();
         }
 
         public bool SubjectExistsByCode(string code)

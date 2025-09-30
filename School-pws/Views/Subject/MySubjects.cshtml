@@ -1,0 +1,26 @@
+﻿@model IEnumerable<School_pws.Models.Applications.ApplicationDetailsViewModel>
+
+@{
+    ViewData["Title"] = "My Subject";
+}
+
+<h2 class="mb-2">My Subjects</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.SubjectName) <i class="fa-solid fa-book"></i></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(modelItem => item.SubjectCode)</h6>
+                    <hr />
+                    <p class="card-text">Grade: @Html.DisplayFor(modelItem => item.Grade)</p>
+                    <p class="mt-auto">
+                        <span class="badge bg-primary">@Html.DisplayFor(modelItem => item.Status) <i class="fa-solid fa-clock"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
