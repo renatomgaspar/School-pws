@@ -47,7 +47,7 @@ namespace School_pws.Controllers
 
             if (!response)
             {
-                ModelState.AddModelError(string.Empty, "This subject is already in your application list.");
+                ModelState.AddModelError(string.Empty, "This subject is already in your application list or is already in another application.");
                 model.Subjects = _subjectRepository.GetComboSubjects();
                 return View(model);
             }
@@ -63,6 +63,18 @@ namespace School_pws.Controllers
             }
 
             await _applicationRepository.DeleteSubjectFromApplication(id.Value);
+
+            return RedirectToAction("Create");
+        }
+
+        public async Task<IActionResult> ConfirmApplication()
+        {
+            var response = await _applicationRepository.ConfirmApplicationAsync(this.User.Identity.Name);
+
+            if (response)
+            {
+                return RedirectToAction("Index");
+            }
 
             return RedirectToAction("Create");
         }

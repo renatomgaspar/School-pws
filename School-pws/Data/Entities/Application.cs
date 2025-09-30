@@ -8,7 +8,8 @@ namespace School_pws.Data.Entities
 
 
         [Required]
-        [Display(Name = "Date")]
+        [Display(Name = "Application Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime ApplicationDate { get; set; }
 
 
@@ -18,7 +19,11 @@ namespace School_pws.Data.Entities
 
 
         [Required]
-        public IEnumerable<Subject> Subjects { get; set; }
+        public IEnumerable<ApplicationDetails> Subjects { get; set; }
+
+
+        [Required]
+        public string Status { get; set; }
 
 
         public int Lines => Subjects == null ? 0 : Subjects.Count();

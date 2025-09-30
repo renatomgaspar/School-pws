@@ -1,4 +1,4 @@
-﻿@model IEnumerable<School_pws.Data.Entities.ApplicationDetails>
+﻿@model IEnumerable<School_pws.Data.Entities.ApplicationDetailsTemp>
 @{
     ViewData["Title"] = "Create Application";
 }
@@ -9,6 +9,7 @@
 <p>
     <a asp-action="AddSubject" class="btn btn-success">Add Subject</a>
     <a asp-action="ConfirmApplication" class="btn btn-primary" id="btnConfirm">Confirm Application</a>
+    <a asp-action="Index" class="btn btn-secondary">Go Back</a>
 </p>
 <table class="table">
     <thead>

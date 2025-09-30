@@ -32,7 +32,9 @@ namespace School_pws.Data
             {
                 if (await _userHelper.IsUserInRoleAsync(user, "Admin"))
                 {
-                    return _context.Applications.OrderByDescending(a => a.ApplicationDate);
+                    return _context.Applications
+                        .Include(u => u.User)
+                        .OrderByDescending(a => a.ApplicationDate);
                 }
 
 
@@ -40,7 +42,7 @@ namespace School_pws.Data
             }
         }
 
-        public async Task<IQueryable<ApplicationDetails>> GetApplicationDetails(string email)
+        public async Task<IQueryable<ApplicationDetailsTemp>> GetApplicationDetails(string email)
         {
             var user = await _userHelper.GetUserByEmailAsync(email);
 
@@ -49,7 +51,7 @@ namespace School_pws.Data
                 return null;
             }
 
-            return _context.ApplicationDetails
+            return _context.ApplicationDetailsTemp
                 .Include(a => a.Subject)
                 .Where(a => a.User == user)
                 .OrderBy(a => a.Subject.Name);
@@ -71,17 +73,26 @@ namespace School_pws.Data
                 return false;
             }
 
-            var applicationDetails = await _context.ApplicationDetails
+            var applicationDetailsTemp = await _context.ApplicationDetailsTemp
                 .Where(ad => ad.User == user && ad.Subject == subject)
                 .FirstOrDefaultAsync();
 
-            if (applicationDetails != null)
+            if (applicationDetailsTemp != null)
             {
                 return false;
-                
             }
 
-            applicationDetails = new ApplicationDetails
+            var existsSubjectInOtherApplication = await _context.Applications
+                .AnyAsync(app => app.User == user
+                && app.Subjects.Any(ad => ad.Subject == subject
+                && (ad.Status == "Applied" || ad.Status == "In Progress")));
+
+            if (existsSubjectInOtherApplication)
+            {
+                return false;
+            }
+
+            applicationDetailsTemp = new ApplicationDetailsTemp
             {
                 Subject = subject,
                 User = user,
@@ -89,22 +100,62 @@ namespace School_pws.Data
                 Status = "Applied"
             };
 
-            _context.ApplicationDetails.Add(applicationDetails);
+            _context.ApplicationDetailsTemp.Add(applicationDetailsTemp);
             await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task DeleteSubjectFromApplication(int id)
         {
-            var applicationDetails = await _context.ApplicationDetails.FindAsync(id);
+            var applicationDetailsTemp = await _context.ApplicationDetailsTemp.FindAsync(id);
 
-            if (applicationDetails == null)
+            if (applicationDetailsTemp == null)
             {
                 return;
             }
 
-            _context.ApplicationDetails.Remove(applicationDetails);
+            _context.ApplicationDetailsTemp.Remove(applicationDetailsTemp);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ConfirmApplicationAsync(string email)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(email);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var applicationDetailsTemp = await _context.ApplicationDetailsTemp
+                .Include(ad => ad.Subject)
+                .Where(ad => ad.User == user)
+                .ToListAsync();
+
+            if (applicationDetailsTemp == null || applicationDetailsTemp.Count == 0)
+            {
+                return false;
+            }
+
+            var applicationDetails = applicationDetailsTemp.Select(ad => new ApplicationDetails
+            {
+                Subject = ad.Subject,
+                Grade = null,
+                Status = "Applied"
+            }).ToList();
+
+            var application = new Application
+            {
+                ApplicationDate = DateTime.UtcNow,
+                User = user,
+                Subjects = applicationDetails,
+                Status = "Applied"
+            };
+
+            await CreateAsync(application);
+            _context.ApplicationDetailsTemp.RemoveRange(applicationDetailsTemp);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

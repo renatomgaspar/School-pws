@@ -8,10 +8,12 @@ namespace School_pws.Data
     {
         Task<IQueryable<Application>> GetApplicationsAsync(string email);
 
-        Task<IQueryable<ApplicationDetails>> GetApplicationDetails(string email);
+        Task<IQueryable<ApplicationDetailsTemp>> GetApplicationDetails(string email);
 
         Task<bool> AddSubjectToApplication(AddApplicationViewModel model, string email);
 
         Task DeleteSubjectFromApplication(int id);
+
+        Task<bool> ConfirmApplicationAsync(string email);
     }
 }

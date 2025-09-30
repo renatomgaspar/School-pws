@@ -2,9 +2,13 @@
 
 namespace School_pws.Data.Entities
 {
-    public class ApplicationDetails
+    public class ApplicationDetailsTemp
     {
         public int Id { get; set; }
+
+
+        [Required]
+        public User User { get; set; }
 
 
         [Required]
@@ -16,8 +20,5 @@ namespace School_pws.Data.Entities
 
         [Required]
         public string Status { get; set; }
-
-
-        public Application Application { get; set; }
     }
 }

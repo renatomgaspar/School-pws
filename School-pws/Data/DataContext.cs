@@ -16,6 +16,7 @@ namespace School_pws.Data
 
         public DbSet<ApplicationDetails> ApplicationDetails { get; set; }
 
+        public DbSet<ApplicationDetailsTemp> ApplicationDetailsTemp { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

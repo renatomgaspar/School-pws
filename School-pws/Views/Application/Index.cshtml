@@ -18,6 +18,9 @@ else
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.User.ImageId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.User.FullName)
             </th>
             <th>
@@ -25,6 +28,9 @@ else
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ApplicationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th class="w-25">
                 Actions
@@ -36,6 +42,12 @@ else
         {
             <tr>
                 <td>
+                    @if (!string.IsNullOrEmpty(item.User.ImageFullPath))
+                    {
+                        <img src="@Url.Content(item.User.ImageFullPath)" alt="Image" style="width:100px;height:150px;max-width:100%;height:auto">
+                    }
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.User.FullName)
                 </td>
                 <td>
@@ -43,6 +55,9 @@ else
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ApplicationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details <i class="fa-solid fa-circle-info"></i></a>

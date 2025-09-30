@@ -38,7 +38,8 @@ namespace School_pws.Data
                     LastName = "Manager",
                     Email = "school_manager@gmail.com",
                     UserName = "school_manager@gmail.com",
-                    PhoneNumber = "911111111"
+                    PhoneNumber = "911111111",
+                    ImageId = Guid.Empty
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "123456");
