@@ -27,10 +27,24 @@ namespace School_pws.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ApplicationDetails>()
+                .HasOne(ad => ad.Subject)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ApplicationDetailsTemp>()
+                .HasOne(adt => adt.Subject)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Subject>()
-                .HasOne(s => s.User)
-                .WithMany()      
-                .IsRequired()           
+                .HasOne<User>()
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Application>()
+                .HasOne<User>()
+                .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

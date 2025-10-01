@@ -14,5 +14,7 @@ namespace School_pws.Data
         Task ChangeActivedSubject(int id);
 
         IEnumerable<SelectListItem> GetComboSubjects();
+
+        Task<bool> HasDependenciesAsync(Subject subject);
     }
 }

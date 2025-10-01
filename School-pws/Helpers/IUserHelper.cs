@@ -34,5 +34,7 @@ namespace School_pws.Helpers
         Task<bool> IsUserInRoleAsync(User user, string roleName);
 
         IEnumerable<SelectListItem> GetComboRoles();
+
+        Task<bool> HasDependenciesAsync(string id);
     }
 }

@@ -295,6 +295,19 @@ namespace School_pws.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var user = await _userHelper.GetUserById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (await _userHelper.HasDependenciesAsync(id))
+            {
+                ViewBag.ErrorTitle = $"{user.UserName} can not be deleted!";
+                ViewBag.ErrorMessage = $"The User have applications or have subjects created in is name!";
+                return View("Error");
+            }
+
             await _userHelper.DeleteUserAsync(id);
             return RedirectToAction(nameof(Manage));
         }

@@ -89,5 +89,11 @@ namespace School_pws.Data
 
             return list;
         }
+
+        public async Task<bool> HasDependenciesAsync(Subject subject)
+        {
+            return await _context.ApplicationDetails.AnyAsync(ad => ad.Subject == subject) 
+                || await _context.ApplicationDetailsTemp.AnyAsync(adt => adt.Subject == subject);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using School_pws.Data;
 using School_pws.Data.Entities;
 using School_pws.Models.Users;
 using System.Security.Claims;
@@ -9,15 +10,18 @@ namespace School_pws.Helpers
 {
     public class UserHelper : IUserHelper
     {
+        private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public UserHelper(
+            DataContext context,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             RoleManager<IdentityRole> roleManager)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -156,6 +160,13 @@ namespace School_pws.Helpers
             });
 
             return list;
+        }
+
+        public async Task<bool> HasDependenciesAsync(string id)
+        {
+            return await _context.Subjects.AnyAsync(s => s.User.Id == id)
+                || await _context.Applications.AnyAsync(a => a.User.Id == id) 
+                || await _context.ApplicationDetailsTemp.AnyAsync(adt => adt.User.Id == id);
         }
     }
 }

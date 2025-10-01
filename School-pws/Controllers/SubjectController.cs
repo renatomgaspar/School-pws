@@ -28,6 +28,7 @@ namespace School_pws.Controllers
                 .OrderBy(s => s.Name));
         }
 
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> MySubjects()
         {
             var subjects = await _subjectRepository.GetUserSubjectsAsync(User.Identity.Name);
@@ -148,9 +149,24 @@ namespace School_pws.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var subject = await _subjectRepository.GetByIdAsync(id); 
+            var subject = await _subjectRepository.GetByIdAsync(id);
+
+            if (subject == null)
+            {
+                return NotFound();
+            }
+
+            if (await _subjectRepository.HasDependenciesAsync(subject))
+            {
+                ViewBag.ErrorTitle = $"{subject.Name} is already in some application or in students subjects";
+                ViewBag.ErrorMessage = $"{subject.Name} can not be deleted because there are applications or students subjects that contains it</br></br>";
+
+                return View("Error");
+            }
+
             await _subjectRepository.DeleteAsync(subject);
             return RedirectToAction(nameof(Manage));
         }
