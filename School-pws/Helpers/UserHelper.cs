@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using School_pws.Data;
 using School_pws.Data.Entities;
 using School_pws.Models.Users;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 
 namespace School_pws.Helpers
@@ -27,10 +30,37 @@ namespace School_pws.Helpers
             _roleManager = roleManager;
         }
 
-        public async Task<IdentityResult> AddUserAsync(User user, string password)
+        public async Task<IdentityResult> AddUserAsync(User user, string password, bool isVerified)
         {
-            return await _userManager.CreateAsync(user, password);
+            MailMessage email = new MailMessage();
+            SmtpClient smtp = new SmtpClient();
+
+            email.From = new MailAddress("schoolmanagerpws@gmail.com");
+            email.To.Add(user.Email);
+
+            email.Subject = "Account Activation";
+
+            email.IsBodyHtml = true;
+            email.Body = $"Click to make your account Active <a href='https://localhost:44340/Account/Activate/?id={user.Id}'>> HERE <</a>";
+
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.Credentials = new NetworkCredential("schoolmanagerpws@gmail.com", "lzqf lrqa jywi agkj");
+            smtp.EnableSsl = true;
+            smtp.Send(email);
+
+            if (isVerified)
+            {
+                user.EmailConfirmed = true;
+                return await _userManager.CreateAsync(user, password);
+            }
+            else
+            {
+                user.EmailConfirmed = false;
+                return await _userManager.CreateAsync(user);
+            } 
         }
+
 
         public async Task AddUserToRoleAsync(User user, string roleName)
         {
@@ -108,6 +138,11 @@ namespace School_pws.Helpers
             existingUser.LastName = user.LastName;
 
             return await _userManager.UpdateAsync(existingUser);
+        }
+
+        public async Task<IdentityResult> AddPasswordAsync(User user, string password)
+        {
+            return await _userManager.AddPasswordAsync(user, password);
         }
 
         public async Task<IdentityResult> DeleteUserAsync(string id)

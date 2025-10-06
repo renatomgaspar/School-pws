@@ -28,7 +28,7 @@ namespace School_pws.Data
             await _userHelper.CheckRoleAsync("Employee");
             await _userHelper.CheckRoleAsync("Student");
 
-            var user = await _userHelper.GetUserByEmailAsync("school_manager@gmail.com");
+            var user = await _userHelper.GetUserByEmailAsync("schoolmanagerpws@gmail.com");
 
             if (user == null)
             {
@@ -36,13 +36,13 @@ namespace School_pws.Data
                 {
                     FirstName = "School",
                     LastName = "Manager",
-                    Email = "school_manager@gmail.com",
-                    UserName = "school_manager@gmail.com",
+                    Email = "schoolmanagerpws@gmail.com",
+                    UserName = "schoolmanagerpws@gmail.com",
                     PhoneNumber = "911111111",
                     ImageId = Guid.Empty
                 };
 
-                var result = await _userHelper.AddUserAsync(user, "123456");
+                var result = await _userHelper.AddUserAsync(user, "123456" , true);
                 if (result != IdentityResult.Success)
                 {
                     throw new InvalidOperationException("Could not create the user in seeder");

@@ -69,7 +69,7 @@ namespace School_pws.Controllers
 
                     user = _converterHelper.ToUser(model, imageId, true);
 
-                    var result = await _userHelper.AddUserAsync(user, model.Password);
+                    var result = await _userHelper.AddUserAsync(user, "", false);
                     if (!result.Succeeded)
                     {
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
@@ -88,6 +88,56 @@ namespace School_pws.Controllers
             }
 
             model.Roles = _userHelper.GetComboRoles();
+            return View(model);
+        }
+
+        public IActionResult Activate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Activate(ActiveAccountViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserById(model.Id);
+                if (user != null)
+
+                {
+                    if (user.EmailConfirmed)
+                    {
+                        ModelState.AddModelError(string.Empty, "User is already verified!");
+                        return View(model);
+                    }
+
+                    var passwordResult = await _userHelper.AddPasswordAsync(user, model.NewPassword);
+
+                    if (passwordResult.Succeeded)
+                    {
+                        user.EmailConfirmed = true;
+                        var result = await _userHelper.UpdateUserAsync(user);
+
+                        if (result.Succeeded)
+                        {
+                            TempData["SuccessMessage"] = "User is Activated!";
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Was not possible to activate your account!");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Could not set the new password!");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User not found!");
+                }
+            }
+
             return View(model);
         }
 

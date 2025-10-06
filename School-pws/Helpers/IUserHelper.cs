@@ -15,7 +15,7 @@ namespace School_pws.Helpers
 
         Task<User> GetUserByEmailAsync(string email);
 
-        Task<IdentityResult> AddUserAsync(User user, string password);
+        Task<IdentityResult> AddUserAsync(User user, string password, bool isVerified);
 
         Task AddUserToRoleAsync(User user, string roleName);
 
@@ -24,6 +24,8 @@ namespace School_pws.Helpers
         Task LogoutAsync();
 
         Task<IdentityResult> UpdateUserAsync(User user);
+
+        Task<IdentityResult> AddPasswordAsync(User user, string password);
 
         Task<IdentityResult> DeleteUserAsync(string id);
 

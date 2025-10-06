@@ -28,15 +28,6 @@ namespace School_pws.Models.Users
         [Display(Name = "UserName*")]
         public string? UserName { get; set; }
 
-        [Required]
-        [MinLength(6)]
-        public string Password { get; set; }
-
-
-        [Required]
-        [Compare("Password")]
-        public string Confirm { get; set; }
-
 
         [Display(Name = "Image")]
         public IFormFile? ImageFile { get; set; }
