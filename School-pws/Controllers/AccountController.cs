@@ -91,8 +91,13 @@ namespace School_pws.Controllers
             return View(model);
         }
 
-        public IActionResult Activate()
+        public IActionResult Activate(string id)
         {
+            var model = new ActiveAccountViewModel
+            {
+                Id = id
+            };
+
             return View();
         }
 
@@ -121,6 +126,7 @@ namespace School_pws.Controllers
                         if (result.Succeeded)
                         {
                             TempData["SuccessMessage"] = "User is Activated!";
+                            return View(model);
                         }
                         else
                         {
