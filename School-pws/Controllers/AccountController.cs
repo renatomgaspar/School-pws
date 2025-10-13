@@ -269,6 +269,95 @@ namespace School_pws.Controllers
             return this.View(model);
         }
 
+        public IActionResult RecoveryPassword(string id)
+        {
+            var model = new ActiveAccountViewModel
+            {
+                Id = id
+            };
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RecoveryPassword(ActiveAccountViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserById(model.Id);
+                if (user != null)
+
+                {
+                    var removePasswordResult = await _userHelper.RemovePasswordAsync(user);
+
+                    if (removePasswordResult.Succeeded)
+                    {
+                        var passwordResult = await _userHelper.AddPasswordAsync(user, model.NewPassword);
+
+                        if (passwordResult.Succeeded)
+                        {
+                            var result = await _userHelper.UpdateUserAsync(user);
+
+                            if (result.Succeeded)
+                            {
+                                TempData["SuccessMessage"] = "Password was changed! Login with your new password";
+                                return View(model);
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "Was not possible to change the password from your account!");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Could not set the new password!");
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User not found!");
+                }
+            }
+
+            return View(model);
+        }
+
+        public IActionResult RecoveryPasswordEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RecoveryPasswordEmail(EmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+                if (user != null)
+
+                {
+                    var result = await _userHelper.SendEmailToRecoryPassword(user);
+
+                    if (result)
+                    {
+                        TempData["SuccessMessage"] = "The email to set the new password was sent.";
+                        return View(model);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Something went wrong.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User not found!");
+                }
+            }
+
+            return View(model);
+        }
+
         [Authorize(Roles = "Admin,Employee")]
         public async Task<ActionResult> Details(string id)
         {
