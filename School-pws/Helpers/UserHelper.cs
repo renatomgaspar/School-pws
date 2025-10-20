@@ -17,17 +17,20 @@ namespace School_pws.Helpers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEncryptHelper _encryptHelper;
 
         public UserHelper(
             DataContext context,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IEncryptHelper encryptHelper)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _encryptHelper = encryptHelper;
         }
 
         public async Task<IdentityResult> AddUserAsync(User user, string password, bool isVerified)
@@ -41,7 +44,7 @@ namespace School_pws.Helpers
             email.Subject = "Account Activation";
 
             email.IsBodyHtml = true;
-            email.Body = $"Click to make your account Active <a href='https://localhost:44340/Account/Activate/?id={user.Id}'>> HERE <</a>";
+            email.Body = $"Click to make your account Active <a href='https://localhost:44340/Account/Activate/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
 
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;
@@ -176,7 +179,7 @@ namespace School_pws.Helpers
             email.Subject = "Recovery Password";
 
             email.IsBodyHtml = true;
-            email.Body = $"Click to change your old password and recover your account <a href='https://localhost:44340/Account/RecoveryPassword/?id={user.Id}'>> HERE <</a>";
+            email.Body = $"Click to change your old password and recover your account <a href='https://localhost:44340/Account/RecoveryPassword/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
 
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;

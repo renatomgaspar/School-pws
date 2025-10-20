@@ -14,16 +14,19 @@ namespace School_pws.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IEncryptHelper _encryptHelper;
 
         public AccountController(
             IUserHelper userHelper,
             IBlobHelper blobHelper,
-            IConverterHelper converterHelper
+            IConverterHelper converterHelper,
+            IEncryptHelper encryptHelper
             )
         {
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
+            _encryptHelper = encryptHelper;
         }
 
         [Authorize(Roles = "Admin,Employee")]
@@ -106,6 +109,8 @@ namespace School_pws.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Id = _encryptHelper.DecryptString(model.Id);
+
                 var user = await _userHelper.GetUserById(model.Id);
                 if (user != null)
 
@@ -284,6 +289,8 @@ namespace School_pws.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Id = _encryptHelper.DecryptString(model.Id);
+
                 var user = await _userHelper.GetUserById(model.Id);
                 if (user != null)
 
