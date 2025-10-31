@@ -75,7 +75,7 @@ namespace School_pws.Controllers
                     return View(subject);
                 }
 
-                subject.User = await _userHelper.GetUserByEmailAsync("school_manager@gmail.com");
+                subject.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _subjectRepository.CreateAsync(subject);
                 return RedirectToAction(nameof(Manage));
             }
@@ -111,7 +111,7 @@ namespace School_pws.Controllers
             {
                 try
                 {
-                    subject.User = await _userHelper.GetUserByEmailAsync("school_manager@gmail.com");
+                    subject.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _subjectRepository.UpdateAsync(subject);
                 }
                 catch (DbUpdateConcurrencyException)

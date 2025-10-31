@@ -74,11 +74,13 @@ namespace School_pws.Data
 
         public IEnumerable<SelectListItem> GetComboSubjects()
         {
-            var list = _context.Subjects.Select(p => new SelectListItem
-            {
-                Text = p.Name,
-                Value = p.Id.ToString()
-            }).ToList();
+            var list = _context.Subjects
+                .Where(s => s.IsActive == true)
+                .Select(p => new SelectListItem
+                {
+                    Text = p.Name,
+                    Value = p.Id.ToString()
+                }).ToList();
 
 
             list.Insert(0, new SelectListItem
