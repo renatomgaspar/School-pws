@@ -2,7 +2,76 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    ViewData["Title"] = "Home - School Enrollment";
+}
+
+<!-- Hero Section -->
+<div class="container-fluid bg-dark text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Welcome to Our School</h1>
+        <p class="lead">Enroll in your favorite subjects and shape your future with us.</p>
+        <a href="/Account/Register" class="btn btn-light btn-lg mt-3">Get Started</a>
+    </div>
+</div>
+
+<!-- About Section -->
+<div class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <img src="~/images/school.jpg" class="img-fluid rounded-3 shadow" alt="School Image">
+        </div>
+        <div class="col-md-6 mt-4 mt-md-0">
+            <h2>About Our School</h2>
+            <p class="text-muted">
+                BrightFuture School is dedicated to providing quality education and diverse learning opportunities.
+                Our online platform allows students to easily register for subjects, manage their enrollments,
+                and stay connected with their academic progress.
+            </p>
+            <a href="/Account/Login" class="btn btn-primary mt-2">Join Us</a>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Why Choose Us?</h2>
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-mortarboard fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title">Qualified Teachers</h5>
+                    <p class="card-text text-muted">Our certified and passionate teachers make learning engaging and effective.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-laptop fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title">Modern Platform</h5>
+                    <p class="card-text text-muted">Easily register for subjects and manage your academic records online.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-people fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title">Community Focused</h5>
+                    <p class="card-text text-muted">Join a vibrant community of students and educators working together.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="bg-light py-5 text-center">
+    <div class="container">
+        <h2>Ready to Start Learning?</h2>
+        <p class="text-muted">Sign up today and take the first step toward your academic success.</p>
+        <a href="/Account/Register" class="btn btn-primary btn-lg">Register Now</a>
+    </div>
 </div>
