@@ -102,7 +102,7 @@ namespace School_pws.Controllers
 
                 _applicationRepository.UpdateApplicationDetailsAsync(applicationDetail);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = applicationDetail.Application.Id }); ;
             }
 
             return View(model);
