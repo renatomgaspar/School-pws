@@ -24,7 +24,7 @@ namespace School_pws.Data.Entities
 
 
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://localhost:44340/images/userDefaultImage.png"
+            ? $"https://schoolpws.somee.com/images/userDefaultImage.png"
             : $"https://schoolcontainer.blob.core.windows.net/users/{ImageId}";
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using School_pws.Data.Entities;
 using School_pws.Helpers;
 using School_pws.Migrations;
@@ -56,6 +57,37 @@ namespace School_pws.Data
                 .Include(a => a.Subject)
                 .Where(a => a.User == user)
                 .OrderBy(a => a.Subject.Name);
+        }
+
+        public async Task<ApplicationDetails> GetApplicationDetailsById(int id)
+        {
+            var applicationDetails = await _context.ApplicationDetails
+                .Include(ad => ad.Subject)
+                .Include(ad => ad.Application)
+                .ThenInclude(a => a.User)
+                .FirstOrDefaultAsync(ad => ad.Id == id);
+
+            if (applicationDetails == null)
+            {
+                return null;
+            }
+
+            return applicationDetails;
+        }
+
+        public async Task UpdateApplicationDetailsAsync(ApplicationDetails applicationDetails)
+        {
+            if (applicationDetails.Grade > 9)
+            {
+                applicationDetails.Status = "Approved";
+            }
+            else
+            {
+                applicationDetails.Status = "Reproved";
+            }
+
+            _context.Update(applicationDetails);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> AddSubjectToApplication(AddApplicationViewModel model, string email)
@@ -174,6 +206,7 @@ namespace School_pws.Data
             return application.Subjects
                 .Select(ad => new ApplicationDetailsViewModel
                 {
+                    Id = ad.Id,
                     ApplicationId = ad.Application.Id,
                     SubjectCode = ad.Subject.Code,
                     SubjectName = ad.Subject.Name,

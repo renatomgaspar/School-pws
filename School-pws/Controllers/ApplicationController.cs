@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using School_pws.Data;
+using School_pws.Helpers;
 using School_pws.Models.Applications;
 using System.Diagnostics;
 
@@ -10,13 +11,16 @@ namespace School_pws.Controllers
     {
         private readonly IApplicationRepository _applicationRepository;
         private readonly ISubjectRepository _subjectRepository;
+        private readonly IConverterHelper _converterHelper;
 
         public ApplicationController(
             IApplicationRepository applicationRepository,
-            ISubjectRepository subjectRepository)
+            ISubjectRepository subjectRepository,
+            IConverterHelper converterHelper)
         {
             _applicationRepository = applicationRepository;
             _subjectRepository = subjectRepository;
+            _converterHelper = converterHelper;
         }
 
         [Authorize]
@@ -57,6 +61,51 @@ namespace School_pws.Controllers
             }
 
             return Redirect("Create");
+        }
+
+        [Authorize(Roles = "Admin,Employee")]
+        public async Task<IActionResult> AddGrade(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var applicationDetail = await _applicationRepository.GetApplicationDetailsById(id);
+            if (applicationDetail == null)
+            {
+                return NotFound();
+            }
+
+            var model = _converterHelper.ToAddGradeViewModel(applicationDetail);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddGrade(AddGradeViewModel model)
+        {
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            var applicationDetail = await _applicationRepository.GetApplicationDetailsById(model.Id);
+            if (applicationDetail == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                applicationDetail.Grade = model.Grade;
+
+                _applicationRepository.UpdateApplicationDetailsAsync(applicationDetail);
+
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
         }
 
         public async Task<IActionResult> DeleteItem(int? id)

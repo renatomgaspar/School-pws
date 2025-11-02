@@ -44,7 +44,7 @@ namespace School_pws.Helpers
             email.Subject = "Account Activation";
 
             email.IsBodyHtml = true;
-            email.Body = $"Click to make your account Active <a href='https://localhost:44340/Account/Activate/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
+            email.Body = $"Click to make your account Active <a href='https://schoolpws.somee.com/Account/Activate/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
 
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;
@@ -179,7 +179,7 @@ namespace School_pws.Helpers
             email.Subject = "Recovery Password";
 
             email.IsBodyHtml = true;
-            email.Body = $"Click to change your old password and recover your account <a href='https://localhost:44340/Account/RecoveryPassword/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
+            email.Body = $"Click to change your old password and recover your account <a href='https://schoolpws.somee.com/Account/RecoveryPassword/?id={_encryptHelper.EncryptString(user.Id)}'>> HERE <</a>";
 
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;

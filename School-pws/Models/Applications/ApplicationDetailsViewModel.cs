@@ -4,6 +4,8 @@ namespace School_pws.Models.Applications
 {
     public class ApplicationDetailsViewModel
     {
+        public int Id { get; set; }
+
         public int ApplicationId { get; set; }
 
         [Display(Name = "Subject Code")]

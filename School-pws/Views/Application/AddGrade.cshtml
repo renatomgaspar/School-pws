@@ -1,0 +1,49 @@
+﻿@model School_pws.Models.Applications.AddGradeViewModel
+
+@{
+    ViewData["Title"] = "Add Grade";
+}
+
+<h1>Add Grade</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <dl class="row">
+            <div>
+                <dt class="col-sm-3">
+                    <b>Subject</b>
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(modelItem => modelItem.Subject.Name)
+                </dd>
+                <dt class="col-sm-3">
+                    <b>Student</b>
+                </dt>
+                <dd>
+                    @Html.DisplayFor(modelItem => modelItem.Application.User.FullName) - @Html.DisplayFor(modelItem => modelItem.Application.User.Email)
+                </dd>
+            </div>
+        </dl>
+
+        <form asp-action="AddGrade">
+            <div class="form-group mt-0 mb-2">
+                <label asp-for="Grade" class="control-label"></label>
+                <input asp-for="Grade" class="form-control" />
+                <span asp-validation-for="Grade" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary">Add <i class="fa-solid fa-floppy-disk"></i></button>
+                <a asp-action="Details" asp-route-id="@Model.Application.Id" class="btn btn-success">Back to List <i class="fa-solid fa-circle-left"></i></a>
+            </div>
+        </form>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

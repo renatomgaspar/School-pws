@@ -1,4 +1,5 @@
 ﻿using School_pws.Data.Entities;
+using School_pws.Models.Applications;
 using School_pws.Models.Users;
 
 namespace School_pws.Helpers
@@ -26,6 +27,29 @@ namespace School_pws.Helpers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 ImageId = imageId,
+            };
+        }
+
+        public AddGradeViewModel ToAddGradeViewModel(ApplicationDetails applicationDetails)
+        {
+            return new AddGradeViewModel
+            {
+                Id = applicationDetails.Id,
+                Grade = applicationDetails.Grade,
+                Status = applicationDetails.Status,
+                Application = applicationDetails.Application,
+                Subject = applicationDetails.Subject
+            };
+        }
+
+        public ApplicationDetails ToApplicationDetails(AddGradeViewModel model, Guid imageId, bool isNew)
+        {
+            return new ApplicationDetails
+            {
+                Grade = model.Grade,
+                Status = model.Status,
+                Application = model.Application,
+                Subject = model.Subject
             };
         }
     }

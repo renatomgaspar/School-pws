@@ -10,6 +10,10 @@ namespace School_pws.Data
 
         Task<IQueryable<ApplicationDetailsTemp>> GetApplicationDetails(string email);
 
+        Task<ApplicationDetails> GetApplicationDetailsById(int id);
+
+        Task UpdateApplicationDetailsAsync(ApplicationDetails applicationDetails);
+
         Task<bool> AddSubjectToApplication(AddApplicationViewModel model, string email);
 
         Task DeleteSubjectFromApplication(int id);
