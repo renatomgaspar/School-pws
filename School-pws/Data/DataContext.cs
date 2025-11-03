@@ -37,13 +37,13 @@ namespace School_pws.Data
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Subject>()
-                .HasOne<User>()
+            modelBuilder.Entity<Application>()
+                .HasOne(a => a.User)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Application>()
-                .HasOne<User>()
+            modelBuilder.Entity<Subject>()
+                .HasOne(s => s.User)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
         }

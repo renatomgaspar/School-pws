@@ -9,7 +9,7 @@ namespace School_pws.Models.Applications
         public int Id { get; set; }
 
         [Range(0, 20, ErrorMessage = "Grade must be between 0 and 20")]
-        public int? Grade { get; set; }
+        public float? Grade { get; set; }
 
         [ValidateNever]
         public string Status { get; set; }

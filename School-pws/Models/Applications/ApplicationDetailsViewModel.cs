@@ -16,7 +16,7 @@ namespace School_pws.Models.Applications
         public string SubjectName { get; set; }
 
 
-        public int? Grade { get; set; }
+        public float? Grade { get; set; }
 
 
         public string Status { get; set; }

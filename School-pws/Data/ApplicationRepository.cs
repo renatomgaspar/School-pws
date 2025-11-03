@@ -77,7 +77,7 @@ namespace School_pws.Data
 
         public async Task UpdateApplicationDetailsAsync(ApplicationDetails applicationDetails)
         {
-            if (applicationDetails.Grade > 9)
+            if (applicationDetails.Grade >= 9.5)
             {
                 applicationDetails.Status = "Approved";
             }

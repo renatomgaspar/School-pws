@@ -34,7 +34,7 @@ namespace School_pws.Data
                 .ThenInclude(ad => ad.Subject)
                 .Where(a => a.User == user)
                 .SelectMany(a => a.Subjects)
-                .Where(ad => ad.Status == "On Going")
+                .Where(ad => ad.Status != "Canceled")
                 .Select(ad => new ApplicationDetailsViewModel
                 {
                     SubjectCode = ad.Subject.Code,

@@ -11,7 +11,7 @@ namespace School_pws.Data.Entities
         public Subject Subject { get; set; }
 
 
-        public int? Grade { get; set; }
+        public float? Grade { get; set; }
 
 
         [Required]
