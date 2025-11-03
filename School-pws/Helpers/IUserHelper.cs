@@ -21,6 +21,8 @@ namespace School_pws.Helpers
 
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
+        Task<SignInResult> TwoFactorLoginAsync(string code);
+
         Task LogoutAsync();
 
         Task<IdentityResult> UpdateUserAsync(User user);

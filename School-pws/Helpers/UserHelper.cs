@@ -112,11 +112,71 @@ namespace School_pws.Helpers
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
-            return await _signInManager.PasswordSignInAsync(
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                return SignInResult.Failed;
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return SignInResult.NotAllowed;
+            }
+
+            var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
+            if (!passwordValid)
+            {
+                return SignInResult.Failed;
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(
                 model.Email,
                 model.Password,
                 model.RememberMe,
-                false);
+                lockoutOnFailure: false);
+
+            if (user.TwoFactorEnabled)
+            {
+                var code = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
+
+                MailMessage email = new MailMessage();
+                SmtpClient smtp = new SmtpClient();
+
+                email.From = new MailAddress("schoolmanagerpws@gmail.com");
+                email.To.Add(user.Email);
+
+                email.Subject = "Two Factor Code";
+
+                email.IsBodyHtml = true;
+                email.Body = $"Here you have your Two factor code: <br> {code}";
+
+                smtp.Host = "smtp.gmail.com";
+                smtp.Port = 587;
+                smtp.Credentials = new NetworkCredential("schoolmanagerpws@gmail.com", "lzqf lrqa jywi agkj");
+                smtp.EnableSsl = true;
+                smtp.Send(email);
+
+                return SignInResult.TwoFactorRequired;
+            }
+
+            return result;
+        }
+
+        public async Task<SignInResult> TwoFactorLoginAsync(string code)
+        {
+            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+
+            if (user == null)
+            {
+                return SignInResult.Failed;
+            }
+
+            return await _signInManager.TwoFactorSignInAsync(
+                TokenOptions.DefaultEmailProvider,
+                code,
+                isPersistent: false,
+                rememberClient: false);
         }
 
         public async Task LogoutAsync()

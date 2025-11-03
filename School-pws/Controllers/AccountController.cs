@@ -177,10 +177,37 @@ namespace School_pws.Controllers
 
                     return this.RedirectToAction("Index", "Home");
                 }
+                else if (result.IsNotAllowed)
+                {
+                    this.ModelState.AddModelError(string.Empty, "You must verify your account first");
+                }
+                else if (result.RequiresTwoFactor)
+                {
+                    return RedirectToAction("TwoFactorLogin");
+                }
             }
 
             this.ModelState.AddModelError(string.Empty, "Failed to Login");
             return View(model);
+        }
+
+        public IActionResult TwoFactorLogin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TwoFactorLogin(string code)
+        {
+            var result = await _userHelper.TwoFactorLoginAsync(code);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid Code");
+            return View();
         }
 
         [Authorize]
@@ -200,6 +227,7 @@ namespace School_pws.Controllers
             {
                 model.FirstName = user.FirstName;
                 model.LastName = user.LastName;
+                model.TwoFactor = user.TwoFactorEnabled;
                 model.ImageId = user.ImageId;
             }
 
@@ -225,6 +253,7 @@ namespace School_pws.Controllers
 
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
+                    user.TwoFactorEnabled = model.TwoFactor;
                     model.ImageId = user.ImageId;
                     var response = await _userHelper.UpdateUserAsync(user);
                     if (response.Succeeded)

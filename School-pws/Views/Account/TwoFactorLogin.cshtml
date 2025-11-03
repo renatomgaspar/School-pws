@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Two-Factor Authentication";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Please enter the code sent to your email.</p>
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form asp-action="TwoFactorLogin" method="post">
+            <div class="form-group mb-2">
+                <label for="code">Code</label>
+                <input type="text" class="form-control" id="code" name="code" required maxlength="6" />
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Verify</button>
+        </form>
+    </div>
+</div>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="text-danger mt-2">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <div>@error.ErrorMessage</div>
+        }
+    </div>
+}

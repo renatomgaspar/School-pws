@@ -132,6 +132,7 @@ namespace School_pws.Controllers
             return RedirectToAction("Create");
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

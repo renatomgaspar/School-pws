@@ -43,7 +43,7 @@
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
-                    @if (this.User.Identity.IsAuthenticated && (this.User.IsInRole("Employee") || this.User.IsInRole("Admin")) && @item.Status != "Canceled")
+                    @if (this.User.Identity.IsAuthenticated && (this.User.IsInRole("Employee") || this.User.IsInRole("Admin")) && (@item.Status == "On Going" || @item.Status == "Approved" || @item.Status == "Reproved"))
                     {
                     <a asp-action="AddGrade" asp-route-id="@item.Id" class="btn btn-primary">Add Grade </a>
                     }

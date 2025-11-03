@@ -29,6 +29,12 @@
                 <span asp-validation-for="LastName" class="text-warning"></span>
             </div>
 
+            <div class="form-group form-check mb-2">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="TwoFactor" /> @Html.DisplayNameFor(model => model.TwoFactor)
+                </label>
+            </div>
+
             <div class="form-group mb-3">
                 <label asp-for="ImageFile" class="control-label"></label>
                 <input asp-for="ImageFile" class="form-control" type="file" />
